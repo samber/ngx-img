@@ -9,7 +9,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import {NgxImgService} from '../service/ngx-img.service';
+import { NgxImgService } from '../service/ngx-img.service';
 
 @Component({
   selector: 'ngx-img',
@@ -53,6 +53,11 @@ export class NgxImgComponent implements OnInit, OnDestroy {
     error?: string
   };
 
+  @Input() get cropper(): any {
+    return this._cropper;
+  };
+  _cropper: any = [];
+
   hasPreview = false;
   hasError = false;
   isLoading = false;
@@ -67,14 +72,14 @@ export class NgxImgComponent implements OnInit, OnDestroy {
     quality?: number,
     crop?: any
   } = {
-    fileSize: 2048,
-    minWidth: 0,
-    maxWidth: 0,
-    minHeight: 0,
-    maxHeight: 0,
-    fileType: ['.gif', '.jpeg', '.png', '.jpg'],
-    quality: 0.8
-  };
+      fileSize: 2048,
+      minWidth: 0,
+      maxWidth: 0,
+      minHeight: 0,
+      maxHeight: 0,
+      fileType: ['.gif', '.jpeg', '.png', '.jpg'],
+      quality: 0.8
+    };
   _text: {
     default?: string,
     _default?: string,
@@ -84,14 +89,14 @@ export class NgxImgComponent implements OnInit, OnDestroy {
     reset?: string,
     error?: string
   } = {
-    default: 'Drag and drop',
-    _default: 'Drag and drop or click',
-    button: 'Choose File',
-    try_again: 'Try Again',
-    replace: 'Drag and drop or click to replace',
-    reset: 'Remove',
-    error: 'Oops, something wrong happened.'
-  };
+      default: 'Drag and drop',
+      _default: 'Drag and drop or click',
+      button: 'Choose File',
+      try_again: 'Try Again',
+      replace: 'Drag and drop or click to replace',
+      reset: 'Remove',
+      error: 'Oops, something wrong happened.'
+    };
   _errorTexts: {
     fileSize?: string,
     minWidth?: string,
@@ -101,14 +106,14 @@ export class NgxImgComponent implements OnInit, OnDestroy {
     imageFormat?: string,
     fileType?: string
   } = {
-    fileSize: 'The file size is too big ({{ value }} max).',
-    minWidth: 'The image width is too small ({{ value }}}px min).',
-    maxWidth: 'The image width is too big ({{ value }}}px max).',
-    minHeight: 'The image height is too small ({{ value }}}px min).',
-    maxHeight: 'The image height is too big ({{ value }}}px max).',
-    imageFormat: 'The image format is not allowed ({{ value }} only).',
-    fileType: 'The file type is not allowed.'
-  };
+      fileSize: 'The file size is too big ({{ value }} max).',
+      minWidth: 'The image width is too small ({{ value }}}px min).',
+      maxWidth: 'The image width is too big ({{ value }}}px max).',
+      minHeight: 'The image height is too small ({{ value }}}px min).',
+      maxHeight: 'The image height is too big ({{ value }}}px max).',
+      imageFormat: 'The image format is not allowed ({{ value }} only).',
+      fileType: 'The file type is not allowed.'
+    };
   errors: any = [];
   file: any;
   mode = 'upload';

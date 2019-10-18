@@ -10,7 +10,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import Cropper from 'cropperjs';
-import {NgxImgService} from '../service/ngx-img.service';
+import { NgxImgService } from '../service/ngx-img.service';
 
 @Component({
   selector: 'ngx-img-crop',
@@ -25,6 +25,9 @@ export class NgxImgCropComponent implements OnInit, OnDestroy {
   @Input() imgSrc: any;
   @Output() onCrop: EventEmitter<any> = new EventEmitter();
   @Output() onReset: EventEmitter<any> = new EventEmitter();
+  @Input() get cropper(): any {
+    return this._cropper;
+  };
   _text = {
     reset: 'Remove'
   };
@@ -38,7 +41,7 @@ export class NgxImgCropComponent implements OnInit, OnDestroy {
     ]
   };
   timer: any = [];
-  cropper: any = [];
+  _cropper: any = [];
   imgData: any = [];
 
   constructor(private _service: NgxImgService, private _ref: ChangeDetectorRef) {
@@ -46,7 +49,7 @@ export class NgxImgCropComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._config = Object.assign(this._config, this.config);
-    this.cropper = [];
+    this._cropper = [];
     this.imgData = [];
     this.initializeCrop();
   }
@@ -74,7 +77,7 @@ export class NgxImgCropComponent implements OnInit, OnDestroy {
         if (opt.maxHeight) {
           options.maxHeight = opt.maxHeight;
         }
-        this.cropper[i] = new Cropper(el, {
+        this._cropper[i] = new Cropper(el, {
           aspectRatio: opt.ratio,
           viewMode: opt.viewMode || 0,
           crop: () => {
@@ -82,7 +85,7 @@ export class NgxImgCropComponent implements OnInit, OnDestroy {
               clearTimeout(this.timer[i]);
             }
             this.timer[i] = setTimeout(() => {
-              this.onCropEvent(i, this.cropper[i].getCroppedCanvas(options).toDataURL('image/png'));
+              this.onCropEvent(i, this._cropper[i].getCroppedCanvas(options).toDataURL('image/png'));
               this.markForCheck();
             }, 500);
           }
@@ -100,21 +103,21 @@ export class NgxImgCropComponent implements OnInit, OnDestroy {
       this.onCrop.emit(img);
       this.markForCheck();
     })
-    .catch(() => {
-      this.imgData[i] = data;
-      const img = this.imgData.length === 1 ? this.imgData[i] : this.imgData;
-      this.onCrop.emit(img);
-      this.markForCheck();
-    });
+      .catch(() => {
+        this.imgData[i] = data;
+        const img = this.imgData.length === 1 ? this.imgData[i] : this.imgData;
+        this.onCrop.emit(img);
+        this.markForCheck();
+      });
   }
 
   reset() {
-    this.cropper.forEach((el: any) => {
+    this._cropper.forEach((el: any) => {
       if (el) {
         el.destroy();
       }
     });
-    this.cropper = [];
+    this._cropper = [];
     this.imgData = [];
     this.imgSrc = '';
     this.onReset.emit();
